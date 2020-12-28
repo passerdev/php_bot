@@ -12,49 +12,44 @@ class Telegram {
         $this->url = self::URL_BASE . $token . '/';
     }
 
+    // https://core.telegram.org/bots/api#getupdates
     public function getUpdates($offset) {
         return $this->request('getUpdates', array('offset' => $offset));
     }
 
+    // https://core.telegram.org/bots/api#sendmessage
     public function sendMessage($chatId, $text) {
         return $this->request('sendMessage', array('chat_id' => $chatId, 'text' => $text));
     }
 
+    // https://core.telegram.org/bots/api#getme
     public function getMe(){
         return $this->request("getMe");
     }
-    /**
-     * Метод удаления сообщений
-     * @param  [int]  $chatId     [ID чата]
-     * @param  [string] $messageId [ID сообщения, которое нужно удалить]
-     * @return [type]             [description]
-     */
+
+    // https://core.telegram.org/bots/api#deletemessage
     public function deleteMessage($chatId, $messageId) {
         return $this->request("deleteMessage", ["chat_id"=> $chatId, "message_id"=>$messageId]);
     }
 
-    /**
-     * Метод отправки файлов/документов
-     * @param  [int]  $chatId     [ID чата]
-     * @param  [string] $pathToFile [ПОЛНЫЙ ПУТЬ к файлу от корня]
-     * @return [type]             [description]
-     */
+    // https://core.telegram.org/bots/api#senddocument
     public function sendDocument($chatId, $pathToFile){
         return $this->request('sendDocument', ["chat_id" => $chatId, "document" => $pathToFile]);
     }
 
-    /**
-     * Метод отправки изображений/фотографий
-     * @param  [int]  $chatId     [ID чата]
-     * @param  [string] $pathToFile [ПОЛНЫЙ ПУТЬ к файлу картинки от корня ИЛИ прямой URL к картинке]
-     * @return [type]             [description]
-     */
+    // https://core.telegram.org/bots/api#sendphoto
     public function sendPhoto($chatId, $pathToFile){
 
         if(filter_var($pathToFile, FILTER_VALIDATE_URL) === FALSE)
            return $this->request('sendPhoto', ["chat_id" => $chatId, "photo" => new CURLFile(realpath($pathToFile))]);
 
         return $this->request('sendPhoto', ["chat_id" => $chatId, "photo" => $pathToFile]);
+    }
+
+    // https://core.telegram.org/bots/api#answercallbackquery
+    public function answerCallbackQuery($callbackQueryId, $data = []) {
+        $data = array_merge(['callback_query_id' => $callbackQueryId], $data);
+        return $this->request('answerCallbackQuery', $data);
     }
 
     private function request($tgMethod, $params = array()) {

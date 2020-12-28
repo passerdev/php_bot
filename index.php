@@ -1,11 +1,9 @@
 <?php
-require_once __DIR__ . '/bot.php';
+require_once __DIR__ . '/utils.php';
+require_once __DIR__ . '/Bot.php';
+require_once __DIR__ . '/Logger.php';
 
-try{
-    $data = file_get_contents('php://input');
-    $data = json_decode($data, true);
-    $bot->processPacket($data);
-} catch(\Exception $e){
-    echo "Поизошла ошибка: {$e->getMessage()}" . PHP_EOL .
-    var_export($data, true);
-}
+$config = getConfig();
+$logger = new Logger($config['logs_folder'], !$config['webhook']);
+$bot = new Bot($config, $logger);
+$bot->start();

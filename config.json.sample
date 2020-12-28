@@ -1,0 +1,11 @@
+{
+  "token": "<token>",
+  "interval": 100,
+  "allowed_ids": [],
+  "webhook": true,
+  "logs_folder": "logs",
+  "game_bot": {
+    "enabled": "true/false or you can set game_bot = null if not a game bot"
+    "game_base_url": "https://url.to/your-game"
+  }
+}
